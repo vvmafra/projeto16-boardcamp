@@ -2,7 +2,7 @@ import joi from "joi"
 
 export const gameSchema = joi.object({
     name: joi.string().required(),
-    image: joi.link().required(),
-    stockTotal: joi.number().positive().required(),
-    pricePerDay: joi.number().positive().required()
+    image: joi.required(),
+    stockTotal: joi.number().integer().positive().required(),
+    pricePerDay: joi.number().integer().positive().required()
 })

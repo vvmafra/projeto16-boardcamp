@@ -14,7 +14,16 @@ export async function getGames(req, res) {
 
 export async function postGames(req, res) {
     const {name, image, stockTotal, pricePerDay} = req.body
+    console.log(req.body)
 
-    const gamesExist = await db.query(`SELECT * FROM games where name=$1`, [name])
+    const gamesExist = await db.query(`SELECT * FROM games WHERE name=$1;`, [name])
     if (!gamesExist) return res.sendStatus(409)
+
+    try {
+        await db.query(`INSERT INTO games (name, image, "stockTotal", "pricePerDay") 
+        VALUES (name=$1, image=$2, "stockTotal"=$3, "pricePerDay"=$4);`,[name, image, stockTotal, pricePerDay])
+        return res.sendStatus(201)
+    } catch (err){
+        res.status(500).send(err.message)
+    }
 }
