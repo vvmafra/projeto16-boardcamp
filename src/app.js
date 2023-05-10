@@ -8,4 +8,4 @@ app.use(express.json())
 app.use(router)
 
 const PORT = 5000
-app.listen(PORT, () => console.log('Using 5000'))
+app.listen(PORT, () => console.log('Using port 5000'))
