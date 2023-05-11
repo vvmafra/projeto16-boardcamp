@@ -7,12 +7,12 @@ export async function postRentals(req, res){
 
     const customer = await db.query(`SELECT * FROM customers WHERE id=$1;`, [customerId])
     const game = await db.query(`SELECT * FROM games WHERE id=$1;`, [gameId])
-    const rentedGames = await db.query(`SELECT * FROM rentals WHERE id=$1`, [id])
-    console.log(game.rows[0].stockTotal)
 
-    const avaiableGames = game.rows[0].stockTotal - rentedGames.rows.length
+    const rentedGames = await db.query(`SELECT COUNT(*) FROM rentals WHERE "gameId"=$1 AND "returnDate"="null"`, [gameId])
 
-    if (customer.rows[0].length === 0 || game.rows[0].length === 0 || avaiableGames > 0) return res.sendStatus(400)
+    const avaiableGames = rentedGames.rows[0].count - game.rows[0].stockTotal
+
+    if (customer.rows[0].length === 0 || game.rows[0].length === 0 || avaiableGames >= 0) return res.sendStatus(400)
     const rentDate = dayjs().format('YYYY/MM/DD')
     const originalPrice = game.rows[0].pricePerDay * daysRented
     
