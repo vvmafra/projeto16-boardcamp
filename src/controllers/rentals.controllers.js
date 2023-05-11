@@ -7,7 +7,7 @@ export async function postRentals(req, res){
     const customer = await db.query(`SELECT * FROM customers WHERE id=$1;`, [customerId])
     const game = await db.query(`SELECT * FROM games WHERE id=$1;`, [gameId])
 
-    if (customer.rows[0].length === 0 || game.rows[0].length === 0) return res.sendStatus(400)
+    if (customer.rows[0].length === 0 || game.rows[0].length === 0 || game.rows[0].stockTotal === 0) return res.sendStatus(400)
     const rentDate = dayjs().format('YYYY/MM/DD')
     const originalPrice = game.rows[0].pricePerDay * daysRented
     
