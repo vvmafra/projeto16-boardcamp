@@ -11,9 +11,11 @@ export async function getCustomers(req, res) {
 
 export async function getCustomersID(req, res) {
     const { id } = req.params
+    const customer = await db.query(`SELECT * FROM customers WHERE id=$1;`, [id])
+    if (customer.rows.length === 0) return res.sendStatus(404)
+
     try {
-        const customer = await db.query(`SELECT * FROM customers WHERE id=$1;`, [id])
-        res.send(customer.rows[0])
+        return res.send(customer.rows[0])
     } catch (err) {
         res.status(500).send(err.message)
     }
