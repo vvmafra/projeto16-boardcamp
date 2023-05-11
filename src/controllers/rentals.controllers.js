@@ -8,7 +8,7 @@ export async function postRentals(req, res){
     const customer = await db.query(`SELECT * FROM customers WHERE id=$1;`, [customerId])
     const game = await db.query(`SELECT * FROM games WHERE id=$1;`, [gameId])
 
-    const rentedGames = await db.query(`SELECT COUNT(*) FROM rentals WHERE "gameId"=$1 AND "returnDate"="null"`, [gameId])
+    const rentedGames = await db.query(`SELECT COUNT(*) FROM rentals WHERE "gameId"=$1 AND "returnDate" IS NULL`, [gameId])
 
     const avaiableGames = rentedGames.rows[0].count - game.rows[0].stockTotal
 
