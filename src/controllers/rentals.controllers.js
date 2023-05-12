@@ -29,6 +29,15 @@ export async function postRentals(req, res){
 
 
 export async function getRentals(req, res){
-    
+    try {
+        const rentals = await db.query(`SELECT rentals.*, customers.name AS "customerName", games.name AS "gameName"
+        FROM rentals
+        JOIN customers ON customers.id = rentals."customerId"
+        JOIN games ON games.id = rentals."gameId";`)
+
+        return res.send(rentals.rows)
+    } catch (err) {
+        res.status(500).send(err.message)
+    }
 }
 
